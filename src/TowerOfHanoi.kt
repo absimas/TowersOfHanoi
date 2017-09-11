@@ -3,26 +3,31 @@ import java.util.*
 /**
  * Created by Simas on 2017 Sep 07.
  */
-class TowerOfHanoi(val name: Char, vararg discs: Int) {
+class TowerOfHanoi(val name: Char, discs: IntArray) {
 
   companion object {
     private var step = 0
 
     @JvmStatic
     fun main(args: Array<String>) {
-      // Init towers
-      val first = TowerOfHanoi('A', 3, 2, 1)
-      val second = TowerOfHanoi('B')
-      val third = TowerOfHanoi('C')
-
       // Read and sort n discs
       println("Enter n:")
       val line = readLine()
       val n = line?.toIntOrNull()
       if (n == null || n !in 1..10) {
-        throw IllegalStateException("Invalid line entered: '$line'!")
+        println("Invalid number entered $line.")
+        main(args)
+        return
       } else {
         println("Entered n = $n.")
+
+        val discs = IntArray(n) { it + 1 }
+
+        // Init towers
+        val first = TowerOfHanoi('A', discs)
+        val second = TowerOfHanoi('B', IntArray(0))
+        val third = TowerOfHanoi('C', IntArray(0))
+
         println("Initial state $first, $second, $third")
         hb(first, second, third, n)
       }
@@ -33,7 +38,7 @@ class TowerOfHanoi(val name: Char, vararg discs: Int) {
       hb(x, z, y, n - 1)
       x.discs.remove(n)
       z.discs.add(n)
-      println("${++step}. Move disc $n from $x to $z")
+      println(String.format("%4d. Move disc %s from %s to %s.", ++step, n, x, z))
       hb(y, x, z, n - 1)
     }
   }
